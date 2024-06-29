@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const passport = require('./src/config/passport');
+const passport = require('./config/passport');
 const session = require('express-session');
 const apiRoutes = require('./routes/api');
 require('./config/passport'); // Passport configuration
