@@ -1,10 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const passport = require('./config/passport');
+const passport = require('./config/passport'); // Ensure this path is correct
 const session = require('express-session');
 const apiRoutes = require('./routes/api');
-require('./config/passport'); // Passport configuration
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,7 +25,7 @@ app.use(passport.session());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+  .catch(err => console.error(err)); // Log error for better visibility
 
 // Routes
 app.use('/api', apiRoutes);
