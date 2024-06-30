@@ -12,6 +12,11 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
+// Check if MONGODB_URL is defined
+if (!process.env.MONGODB_URL) {
+  throw new Error('MONGODB_URL environment variable is not defined');
+}
+
 // Express session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -27,10 +32,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error(err));
+  .catch(err => console.log(err));
 
 // Routes
 app.use('/api', apiRoutes);
