@@ -1,5 +1,5 @@
+const fs = require('fs');
 const swaggerJSDoc = require('swagger-jsdoc');
-
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
@@ -19,5 +19,8 @@ const options = {
 
 // Initialize swagger-jsdoc -> returns validated swagger spec in json format
 const swaggerSpec = swaggerJSDoc(options);
+
+// Write swaggerSpec to swagger.json file
+fs.writeFileSync('./swagger.json', JSON.stringify(swaggerSpec, null, 2));
 
 module.exports = swaggerSpec;
