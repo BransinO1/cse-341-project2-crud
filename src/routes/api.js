@@ -122,6 +122,23 @@ router.get('/items', async (req, res) => {
  *         description: Internal server error
  */
 
+router.get('/items/:id', async (req, res) => {
+  const itemId = req.params.id;
+
+  try {
+    const item = await Item.findById(itemId);
+
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+
+    res.json(item);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 /**
  * @swagger
  * /api/items/{id}:
