@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('./config/passport'); // Ensure this path is correct
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const apiRoutes = require('./routes/api');
 
 const app = express();
@@ -13,9 +14,13 @@ app.use(express.json());
 
 // Express session middleware
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Use the secret from .env
+  secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    ttl: 14 * 24 * 60 * 60
+  })
 }));
 
 // Passport middleware
@@ -25,7 +30,7 @@ app.use(passport.session());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error(err)); // Log error for better visibility
+  .catch(err => console.error(err));
 
 // Routes
 app.use('/api', apiRoutes);
