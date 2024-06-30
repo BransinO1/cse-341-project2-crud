@@ -28,7 +28,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
   .catch(err => console.error(err)); // Log error for better visibility
 
 // Routes
-app.use('/api', apiRoutes);
+app.use('/api', require('./routes/api'));
 
 // OAuth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
