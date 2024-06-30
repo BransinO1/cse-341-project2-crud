@@ -6,7 +6,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const apiRoutes = require('./routes/api');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDefinition = require('./swaggerDefinition');
+const swaggerSpec = require('./swaggerDefinition');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
