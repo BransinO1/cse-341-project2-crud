@@ -9,12 +9,15 @@
   "dependencies": {
     "connect-mongo": "^5.1.0",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "express-session": "^1.18.0",
-    "express-validator": "^6.12.1",
-    "mongoose": "^5.13.3",
+    "express-validator": "^6.15.0",
+    "mongoose": "^5.13.22",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "swagger": "^0.7.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "author": "Corbin Meacham",
   "license": "ISC"

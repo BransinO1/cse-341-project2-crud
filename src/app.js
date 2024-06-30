@@ -1,10 +1,12 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const passport = require('./config/passport'); // Ensure this path is correct
+const passport = require('./config/passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const apiRoutes = require('./routes/api');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDefinition = require('./swaggerDefinition');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,6 +42,9 @@ mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTop
 // Routes
 app.use('/api', apiRoutes);
 
+// Serve Swagger UI at /api-docs endpoint
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // OAuth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
 
@@ -55,6 +60,8 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
 });
+
+
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
