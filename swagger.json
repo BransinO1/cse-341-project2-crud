@@ -6,6 +6,23 @@
     "description": "API Documentation for Your Application"
   },
   "basePath": "/",
+  "components": {
+    "securitySchemes": {
+      "googleAuth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://accounts.google.com/o/oauth2/auth",
+            "tokenUrl": "https://oauth2.googleapis.com/token",
+            "scopes": {
+              "profile": "Access your basic profile information",
+              "email": "Access your email address"
+            }
+          }
+        }
+      }
+    }
+  },
   "paths": {
     "/api/items": {
       "post": {
@@ -364,9 +381,50 @@
           }
         }
       }
+    },
+    "/auth/google": {
+      "get": {
+        "summary": "Initiate Google OAuth",
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to Google OAuth"
+          }
+        }
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "summary": "Google OAuth callback",
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful authentication"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "summary": "Log out the current user",
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to home page after logout"
+          }
+        }
+      }
     }
   },
-  "components": {},
   "tags": [
     {
       "name": "Items",
@@ -375,6 +433,10 @@
     {
       "name": "Users",
       "description": "APIs for managing users"
+    },
+    {
+      "name": "Auth",
+      "description": "Authentication related endpoints"
     }
   ]
 }

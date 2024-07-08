@@ -5,6 +5,9 @@ const passport = require('./config/passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const apiRoutes = require('./routes/api');
+const authRoutes = require('./routes/auth');
+const dashboardRoutes = require('./routes/dashboard');
+const { ensureAuth } = require('./middleware/auth');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swaggerDefinition');
 
@@ -12,7 +15,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.set('view engine', 'ejs');
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Check if MONGODB_URL is defined
 if (!process.env.MONGODB_URL) {
@@ -37,31 +42,41 @@ app.use(passport.session());
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+  .catch(err => console.error(err));
 
 // Routes
 app.use('/api', apiRoutes);
+app.use('/auth', authRoutes);
+app.use('/dashboard', dashboardRoutes);
 
 // Serve Swagger UI at /api-docs endpoint
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // OAuth routes
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
-    res.redirect('/'); // Redirect to the index route
+    res.redirect('/dashboard');
   }
 );
+
+// Logout route
+app.get('/logout', (req, res) => {
+  req.logout(err => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
 });
-
-
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

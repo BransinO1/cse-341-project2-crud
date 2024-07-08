@@ -8,14 +8,23 @@ const addressSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  dateOfBirth: { type: Date, required: true },
-  address: { type: addressSchema, required: true },
+  // Fields for local (email/password) users
+  firstName: { type: String },
+  lastName: { type: String },
+  email: { type: String, unique: true }, // Only required for local users
+  password: { type: String }, // Only required for local users
+  dateOfBirth: { type: Date },
+  address: { type: addressSchema },
+  
+  // Fields for OAuth users (e.g., Google)
+  googleId: { type: String, unique: true }, // Required for OAuth users
+  displayName: { type: String }, // Display name from OAuth provider
+  // Add other fields as needed for OAuth users
+
+  // Common fields
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('User', userSchema);
+
