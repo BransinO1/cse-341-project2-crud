@@ -213,6 +213,9 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "googleId": {
+                    "type": "string"
+                  },
                   "firstName": {
                     "type": "string"
                   },
@@ -330,6 +333,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "googleId": {
+                    "type": "string",
+                    "example": 114534031755826050000
+                  },
                   "firstName": {
                     "type": "string",
                     "example": "Corb"
