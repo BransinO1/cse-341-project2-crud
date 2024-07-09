@@ -213,7 +213,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
                     "type": "string"
                   },
                   "email": {
@@ -222,14 +225,26 @@
                   "password": {
                     "type": "string"
                   },
-                  "address": {
-                    "type": "string"
-                  },
-                  "phone": {
-                    "type": "number"
-                  },
                   "dateOfBirth": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "address": {
+                    "type": "object",
+                    "properties": {
+                      "street": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      },
+                      "zipCode": {
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }
@@ -241,7 +256,7 @@
             "description": "User created successfully"
           },
           "400": {
-            "description": "Bad request, validation error"
+            "description": "Bad request"
           },
           "500": {
             "description": "Internal server error"
@@ -315,23 +330,47 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
-                    "type": "string"
+                  "firstName": {
+                    "type": "string",
+                    "example": "Corb"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "example": "Meac"
                   },
                   "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Corb.meac@example.com"
                   },
                   "password": {
-                    "type": "string"
-                  },
-                  "address": {
-                    "type": "string"
-                  },
-                  "phone": {
-                    "type": "number"
+                    "type": "string",
+                    "example": "cmpassword"
                   },
                   "dateOfBirth": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "date",
+                    "example": "1995-11-21"
+                  },
+                  "address": {
+                    "type": "object",
+                    "properties": {
+                      "street": {
+                        "type": "string",
+                        "example": "456 East St"
+                      },
+                      "city": {
+                        "type": "string",
+                        "example": "Boise"
+                      },
+                      "state": {
+                        "type": "string",
+                        "example": "Idaho"
+                      },
+                      "zipCode": {
+                        "type": "string",
+                        "example": 12345
+                      }
+                    }
                   }
                 }
               }
@@ -343,7 +382,7 @@
             "description": "User updated successfully"
           },
           "400": {
-            "description": "Invalid request body or parameters"
+            "description": "Bad request"
           },
           "404": {
             "description": "User not found"

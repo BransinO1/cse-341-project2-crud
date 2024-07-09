@@ -273,6 +273,8 @@ router.delete('/items/:id', async (req, res) => {
  *           schema:
  *             type: object
  *             properties:
+ *               googleId:
+ *                 type: string
  *               firstName:
  *                 type: string
  *               lastName:
@@ -306,6 +308,7 @@ router.delete('/items/:id', async (req, res) => {
 router.post(
   '/users',
   [
+    check('googleId').not().isEmpty().withMessage('Google Id is required'),
     check('firstName').not().isEmpty().withMessage('First name is required'),
     check('lastName').not().isEmpty().withMessage('Last name is required'),
     check('email').isEmail().withMessage('Email is invalid'),
@@ -395,6 +398,9 @@ router.get('/users/:id', async (req, res) => {
  *           schema:
  *             type: object
  *             properties:
+ *               googleId:
+ *                 type: string
+ *                 example: 114534031755826059519
  *               firstName:
  *                 type: string
  *                 example: Corb
@@ -440,6 +446,7 @@ router.get('/users/:id', async (req, res) => {
 router.put(
   '/users/:id',
   [
+    check('googleId').not().isEmpty().withMessage('Google Id is required'),
     check('firstName').not().isEmpty().withMessage('First name is required'),
     check('lastName').not().isEmpty().withMessage('Last name is required'),
     check('email').isEmail().withMessage('Email is invalid'),
