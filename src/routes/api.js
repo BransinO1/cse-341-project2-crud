@@ -273,35 +273,48 @@ router.delete('/items/:id', async (req, res) => {
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               firstName:
+ *                 type: string
+ *               lastName:
  *                 type: string
  *               email:
  *                 type: string
  *               password:
  *                 type: string
- *               address:
- *                 type: string
- *               phone:
- *                 type: number
  *               dateOfBirth:
  *                 type: string
+ *                 format: date
+ *               address:
+ *                 type: object
+ *                 properties:
+ *                   street:
+ *                     type: string
+ *                   city:
+ *                     type: string
+ *                   state:
+ *                     type: string
+ *                   zipCode:
+ *                     type: string
  *     responses:
  *       '200':
  *         description: User created successfully
  *       '400':
- *         description: Bad request, validation error
+ *         description: Bad request
  *       '500':
  *         description: Internal server error
  */
 router.post(
   '/users',
   [
-    check('name').not().isEmpty().withMessage('Name is required'),
+    check('firstName').not().isEmpty().withMessage('First name is required'),
+    check('lastName').not().isEmpty().withMessage('Last name is required'),
     check('email').isEmail().withMessage('Email is invalid'),
     check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-    check('address').not().isEmpty().withMessage('Address is required'),
-    check('phone').isNumeric().withMessage('Phone must be a number'),
-    check('dateOfBirth').not().isEmpty().withMessage('Date of Birth is required')
+    check('dateOfBirth').isISO8601().withMessage('Date of Birth must be a valid date'),
+    check('address.street').not().isEmpty().withMessage('Street is required'),
+    check('address.city').not().isEmpty().withMessage('City is required'),
+    check('address.state').not().isEmpty().withMessage('State is required'),
+    check('address.zipCode').not().isEmpty().withMessage('Zip Code is required')
   ],
   apiController.createUser
 );
@@ -382,36 +395,60 @@ router.get('/users/:id', async (req, res) => {
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               firstName:
  *                 type: string
+ *                 example: Corb
+ *               lastName:
+ *                 type: string
+ *                 example: Meac
  *               email:
  *                 type: string
+ *                 example: Corb.meac@example.com
  *               password:
  *                 type: string
- *               address:
- *                 type: string
- *               phone:
- *                 type: number
+ *                 example: cmpassword
  *               dateOfBirth:
  *                 type: string
+ *                 format: date
+ *                 example: 1995-11-21
+ *               address:
+ *                 type: object
+ *                 properties:
+ *                   street:
+ *                     type: string
+ *                     example: 456 East St
+ *                   city:
+ *                     type: string
+ *                     example: Boise
+ *                   state:
+ *                     type: string
+ *                     example: Idaho
+ *                   zipCode:
+ *                     type: string
+ *                     example: 12345
  *     responses:
  *       '200':
  *         description: User updated successfully
  *       '400':
- *         description: Invalid request body or parameters
+ *         description: Bad request
  *       '404':
  *         description: User not found
  *       '500':
  *         description: Internal server error
  */
-router.put('/users/:id',
+
+router.put(
+  '/users/:id',
   [
-    check('name').optional().not().isEmpty().withMessage('Name cannot be empty'),
-    check('email').optional().isEmail().withMessage('Email is invalid'),
-    check('password').optional().isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-    check('address').optional().not().isEmpty().withMessage('Address cannot be empty'),
-    check('phone').optional().isNumeric().withMessage('Phone must be a number'),
-    check('dateOfBirth').optional().not().isEmpty().withMessage('Date of Birth cannot be empty')
+    check('firstName').not().isEmpty().withMessage('First name is required'),
+    check('lastName').not().isEmpty().withMessage('Last name is required'),
+    check('email').isEmail().withMessage('Email is invalid'),
+    check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    check('dateOfBirth').isISO8601().withMessage('Date of Birth must be a valid date'),
+    check('address.street').not().isEmpty().withMessage('Street is required'),
+    check('address.city').not().isEmpty().withMessage('City is required'),
+    check('address.state').not().isEmpty().withMessage('State is required'),
+    check('address.zipCode').not().isEmpty().withMessage('Zip Code is required')
   ],
   apiController.updateUser
 );
